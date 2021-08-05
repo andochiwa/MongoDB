@@ -66,3 +66,11 @@ MongoDB 提供了水平可扩展性作为其核心功能的一部分，分片将
 
 从 3.4 开始，MongoDB 支持基于片键创建数据区域。在一个平衡的集群中，MongoDB 将一个区域所覆盖的读写定向到该区域的片上
 
+# MondoDB 安装
+
+使用 docker 安装，方便又快捷~
+
+```bash
+docker-compose up -d
+```
+
