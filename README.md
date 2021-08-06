@@ -213,7 +213,7 @@ db.comment.insertMany([
 ```bash
 db.COLLECTION.find(<query>, [projection])
 # 示例
-db.comment.find({article_id: "100001"})
+db.comment.find({article_id: "100001"}, {article_id: 1, _id: 0})
 ```
 
 | Parameter  | Type     | Description                                                  |
