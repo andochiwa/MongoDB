@@ -125,3 +125,25 @@ show databases
 db.dropdatabase()
 ```
 
+## 3. 集合操作
+
+Mongo 中的集合类似数据库中的表
+
+可以显示的创建，也可以隐式的创建
+
+### 3.1 显示创建
+
+```bash
+# 基本语法
+db.createCollection(NAME)
+# 查看当前库中的表
+show collections
+or
+show tables
+```
+
+## 3.2 隐式创建
+
+当向集合中插入一个文档时，如果集合不存在，则会自动创建集合
+
+> 一般使用隐式创建即可
