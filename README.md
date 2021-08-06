@@ -155,3 +155,69 @@ db.COLLECTION.drop()
 ```
 
 返回值：如果成功删除，drop() 方法返回 true，否则返回 false
+
+## 4. 文档 CRUD
+
+文档的数据结构和 JSON 基本一样，所有存储在集合中的数据都是 BSON 格式
+
+### 4.1 插入
+
+1. 单个文档插入
+
+使用 insert() 或者 save() 方法向集合中插入文档
+
+```bash
+db.COLLECTION.insert (
+    <document or array of document>
+    {
+        writeConcern: <document>
+        ordered: <boolean>
+    }
+)
+# 示例
+db.comment.insert({"article_id": "100000", "content": "it's ok", "user_id": "1001", "nickname": "Mary", "create_time": new Date(), "like_num": NumberInt(10), "state": null})
+```
+
+注意：
+
+如果 comment 集合不存在，则会隐式创建
+
+Mongo 中的数字，默认情况是 double 类型，如果要存整型，必须使用函数 NumberInt(NUM)
+
+插入当前日期使用 new Date()
+
+插入的数据没有指定 _id，会自动生成主键
+
+如果某字段没值，可以复制为 null 或者不写
+
+2. 批量插入
+
+```bash
+db.COLLECTION.insertMany(
+    [<document 1>, <document 2>, ...]
+    {
+        writeConcern: <document>
+        ordered: <boolean>
+    }
+)
+# 示例
+db.comment.insertMany([
+    {"article_id": "100001", "content": "a", "user_id": "1002", "nickname": "Ma", "create_time": new Date(), "like_num": NumberInt(10), "state": null},
+    {"article_id": "100002", "content": "b", "user_id": "1003", "nickname": "Mi", "create_time": new Date(), "like_num": NumberInt(15), "state": null},
+    {"article_id": "100003", "content": "c", "user_id": "1004", "nickname": "Mo", "create_time": new Date(), "like_num": NumberInt(1), "state": null},
+])
+```
+
+### 4.2 查询
+
+```bash
+db.COLLECTION.find(<query>, [projection])
+# 示例
+db.comment.find({article_id: "100001"})
+```
+
+| Parameter  | Type     | Description                                                  |
+| ---------- | -------- | ------------------------------------------------------------ |
+| query      | document | 可选。使用查询运算符指定选择筛选器，若要返回集合中的所有文档，则省略该参数或者传递空文档({}) |
+| projection | document | 可选。指定要在与查询筛选器匹配的文档中返回的字段（投影）。若要返回匹配文档中的所有字段则省略 |
+
