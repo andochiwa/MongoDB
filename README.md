@@ -311,3 +311,27 @@ db.COLLECTION.find().sort({KEY: 1})
 db.comment.find().sort({article_id: 1, like_num: 1})
 ```
 
+### 5.4 比较查询
+
+```json
+db.COLLECTION.find({KEY: {$gt: value}}) # KEY > value
+db.COLLECTION.find({KEY: {$gte: value}}) # KEY >= value
+db.COLLECTION.find({KEY: {$lt: value}}) # KEY < value
+db.COLLECTION.find({KEY: {$nt: value}}) # KEY != value
+```
+
+### 5.5 包含查询
+
+```json
+db.COLLECTION.find({KEY: {$in: ["1", "2"]}}) # KEY里包含1和2的
+```
+
+### 5.6 条件连接查询
+
+```json
+# and
+db.COLLECTION.find({$and: [{query1}, {query2}, ...]})
+# or
+db.COLLECTION.find({$or: [{query1}, {query2}, ...]})
+```
+
