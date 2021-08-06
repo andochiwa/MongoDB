@@ -166,7 +166,7 @@ db.COLLECTION.drop()
 
 使用 insert() 或者 save() 方法向集合中插入文档
 
-```bash
+```json
 db.COLLECTION.insert (
     <document or array of document>
     {
@@ -192,8 +192,8 @@ Mongo 中的数字，默认情况是 double 类型，如果要存整型，必须
 
 2. 批量插入
 
-```bash
-db.COLLECTION.insertMany(
+```json
+db.COLLECTION.insertMany (
     [<document 1>, <document 2>, ...]
     {
         writeConcern: <document>
@@ -220,4 +220,46 @@ db.comment.find({article_id: "100001"}, {article_id: 1, _id: 0})
 | ---------- | -------- | ------------------------------------------------------------ |
 | query      | document | 可选。使用查询运算符指定选择筛选器，若要返回集合中的所有文档，则省略该参数或者传递空文档({}) |
 | projection | document | 可选。指定要在与查询筛选器匹配的文档中返回的字段（投影）。若要返回匹配文档中的所有字段则省略 |
+
+### 4.3 更新
+
+```json
+db.COLLECTION.update(query, update, options)
+or
+db.COLLECTION.update (
+	<query>,
+	<update>,
+	{
+		upsert: <boolean>,
+    	multi: <boolean>,
+    	writeConcern: <document>,
+    	collation: <document>,
+    	arrayFilters: [<filterdocument1>, ...],
+		hint: <document | string>
+	}
+)
+
+# 示例
+# 覆盖修改，会覆盖掉整个文档
+db.comment.update({article_id: "1"}, {like_num: NumberInt(1005)})
+# 局部修改，解决覆盖修改修改其他字段的问题，使用修改器 $set
+db.comment.update({article_id: "2"}, {$set: {like_num: NumberInt(1005)}})
+# 批量修改，默认只修改第一条数据
+db.comment.update({article_id: "3"}, {$set: {like_num: NumberInt(1006)}}, {multi: true})
+# 递增/递减
+db.comment.update({article_id: "4"}, {$inc: {like_num: NumberInt(1)}})
+```
+
+| Parameter    | Type                    | Description                                                  |
+| ------------ | ----------------------- | ------------------------------------------------------------ |
+| query        | document                | 更新的选择条件，可以使用与find()方法中相同的查询选择器，类似 sql update 查询的 where |
+| update       | document                | 要应用的修改，可以理解为 sql update 内 set 后面的值          |
+| upsert       | boolean                 | 可选。如果为 true，则在没有查询条件匹配的文档时创建新文档，默认为 false |
+| multi        | boolean                 | 可选。如果为 true，则更新符合查询条件的多个文档，默认为 false |
+| writeConcern | document                | 可选。表示写问题的文档。抛出异常的级别。                     |
+| collation    | document                | 可选。指定用于操作的校对规则                                 |
+| arrayFilters | array                   | 可选。筛选文档的数组，用于确定要为数组字段上的更新操作修改哪些数组元素。 |
+| hint         | document<br />or string | 可选。指定用于支持查询谓词的索引的文档或者字符串             |
+
+
 
