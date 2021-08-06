@@ -241,13 +241,13 @@ db.COLLECTION.update (
 
 # 示例
 # 覆盖修改，会覆盖掉整个文档
-db.comment.update({article_id: "1"}, {like_num: NumberInt(1005)})
+db.comment.update({article_id: "100000"}, {like_num: NumberInt(1005)})
 # 局部修改，解决覆盖修改修改其他字段的问题，使用修改器 $set
-db.comment.update({article_id: "2"}, {$set: {like_num: NumberInt(1005)}})
+db.comment.update({article_id: "100001"}, {$set: {like_num: NumberInt(1005)}})
 # 批量修改，默认只修改第一条数据
-db.comment.update({article_id: "3"}, {$set: {like_num: NumberInt(1006)}}, {multi: true})
+db.comment.update({article_id: "100001"}, {$set: {like_num: NumberInt(1006)}}, {multi: true})
 # 递增/递减
-db.comment.update({article_id: "4"}, {$inc: {like_num: NumberInt(1)}})
+db.comment.update({article_id: "100001"}, {$inc: {like_num: NumberInt(1)}})
 ```
 
 | Parameter    | Type                    | Description                                                  |
@@ -267,7 +267,47 @@ db.comment.update({article_id: "4"}, {$inc: {like_num: NumberInt(1)}})
 db.COLLECTION.remove(CONDITION)
 # 删除所有数据
 db.comment.remove({})
-# 删除article_id为1的数据
-db.comment.remove({article_id: "1"})
+# 删除article_id为100001的数据
+db.comment.remove({article_id: "100001"})
+```
+
+## 5. 高级查询
+
+### 5.1 统计查询
+
+统计查询使用 count() 方法
+
+```json
+db.COLLECTION.count(query, options)
+# 示例
+db.comment.count({article_id: "100001"})
+```
+
+| Parameter | Type     | Description                  |
+| --------- | -------- | ---------------------------- |
+| query     | document | 查询选择条件                 |
+| options   | document | 可选。用于修改计数的额外条件 |
+
+### 5.2 分页列表查询
+
+可以使用 limit() 方法读取指定数量的数据，使用 skip() 方法跳过指定数量的数据
+
+```json
+db.COLLECTION.find().skip(NUM).limit(NUM)
+# 示例
+# 第一页
+db.comment.find().skip(0).limit(2)
+# 第二页
+db.comment.find().skip(2).limit(2)
+```
+
+### 5.3 排序查询
+
+sort() 方法对数据进行排序，通过参数指定排序的字段和方式，其中 1 为升序，-1 为降序
+
+```json
+db.COLLECTION.find().sort({KEY: 1})
+# 示例
+db.comment.find().sort({article_id: 1, like_num: 1})
 ```
 
