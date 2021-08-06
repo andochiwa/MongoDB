@@ -261,5 +261,13 @@ db.comment.update({article_id: "4"}, {$inc: {like_num: NumberInt(1)}})
 | arrayFilters | array                   | 可选。筛选文档的数组，用于确定要为数组字段上的更新操作修改哪些数组元素。 |
 | hint         | document<br />or string | 可选。指定用于支持查询谓词的索引的文档或者字符串             |
 
+### 4.4 删除
 
+```json
+db.COLLECTION.remove(CONDITION)
+# 删除所有数据
+db.comment.remove({})
+# 删除article_id为1的数据
+db.comment.remove({article_id: "1"})
+```
 
