@@ -335,3 +335,10 @@ db.COLLECTION.find({$and: [{query1}, {query2}, ...]})
 db.COLLECTION.find({$or: [{query1}, {query2}, ...]})
 ```
 
+# MongoDB 索引
+
+## 1. 概述
+
+索引支持 Mongo 中高效的执行查询。如果没有索引，Mongo 必须执行全集合扫描，即扫描集合中每个文档，以选择与查询语句匹配的文档。这种扫描全集合的查询效率是非常低的，特别在处理大量的数据时，查询可能花费很长时间。如果查询存在适当的索引，Mongo 可以使用该索引限制必须检查的文档数。
+
+MongoDB 使用 B-tree 作索引
