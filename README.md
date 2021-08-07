@@ -407,3 +407,22 @@ db.comment.createIndex({article_id: 1}, {name: "article_id_idx"})
 | default_language   | string   | 对于文本索引，该参数决定了停用词以及词干和词器的规则的列表，默认为英语 |
 | language_override  | string   | 对于文本索引，该参数指定了包含在文档中的字段名，语言覆盖默认的language |
 
+### 3.3 删除索引
+
+```json
+db.COLLECTION.dropIndex(INDEX) # 删除单个索引
+db.COLLECTION.dropIndexes()    # 删除所有索引
+# 示例
+db.comment.dropIndex("article_id_idx")
+```
+
+## 4. 索引的使用
+
+### 4.1 执行计划
+
+分析查询性能通常使用执行计划来查看查询的情况，例如查询的耗时，是否使用索引等
+
+```json
+db.COLLECTION.find(query, options).explain(options)
+```
+
