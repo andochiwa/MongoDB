@@ -351,7 +351,7 @@ Mongo 支持在文档的单个字段上创建用户定义的排序索引，称�
 
 对于单个字段索引和排序操作，索引键的排序顺序并不重要，因为 Mongo 可以在任何方向上遍历索引
 
-## 2.2 复合索引
+### 2.2 复合索引
 
 Mongo 还支持多个字段的复合索引
 
@@ -372,3 +372,38 @@ Mongo 提供了一种文本索引类型，支持在集合中搜索字符串内�
 3. 哈希索引
 
 Mongo 也支持基于哈希的索引，它对字段值的哈希值进行索引。
+
+## 3. 索引的管理操作
+
+### 3.1 查看索引
+
+```json
+db.COLLECTION.getIndexes()
+```
+
+### 3.2 创建索引
+
+```json
+db.COLLECTION.createIndex(keys, options)
+# 示例
+db.comment.createIndex({article_id: 1}, {name: "article_id_idx"})
+```
+
+| Parameter | Type     | Description                                              |
+| --------- | -------- | -------------------------------------------------------- |
+| keys      | document | 包含字段和值对的文档，其中字段是索引键，值是指定升序降序 |
+| options   | document | 可选。包含一组控制索引创建的选项文档。                   |
+
+`options`：
+
+| Parameter          | Type     | Description                                                  |
+| ------------------ | -------- | ------------------------------------------------------------ |
+| background         | boolean  | 建立索引过程需要阻塞其它操作，background 设置为 true 可以指定为后台建立索引 |
+| unique             | boolean  | 是否唯一                                                     |
+| name               | string   | 索引名称，如果没未指定，Mongo 会通过连接索引的字段名和排序顺序生成 |
+| sparse             | Boolean  | 对文档中不存在的字段数据不启动索引，如果为 true，**索引字段不会查询出不包含对应字段的文档** |
+| expireAfterSeconds | integer  | 指定一个以秒为单位的数值，设置集合的生存时间                 |
+| weights            | document | 索引权重值                                                   |
+| default_language   | string   | 对于文本索引，该参数决定了停用词以及词干和词器的规则的列表，默认为英语 |
+| language_override  | string   | 对于文本索引，该参数指定了包含在文档中的字段名，语言覆盖默认的language |
+
