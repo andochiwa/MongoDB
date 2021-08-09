@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.io.Serializable;
@@ -20,7 +21,7 @@ import java.time.LocalDateTime;
 @CompoundIndex(def = "{'user_id': -1, 'like_num': 1}")
 public class Comment implements Serializable {
 
-    @MongoId
+    @MongoId(FieldType.OBJECT_ID)
     private String id;
 
     @Field("article_id")

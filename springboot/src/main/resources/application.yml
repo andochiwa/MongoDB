@@ -4,3 +4,5 @@ spring:
       host: 127.0.0.1
       database: articledb
       port: 27017
+      username: root
+      password: root
