@@ -4,6 +4,7 @@ import com.github.mongo.entity.Comment;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.time.LocalDateTime;
@@ -54,5 +55,14 @@ class CommentServiceTest {
 
         Comment comment = commentService.getById(id);
         System.out.println(comment);
+    }
+
+    @Test
+    void getListByArticleIdPage() {
+        String articleId = "100001";
+        int page = 1, size = 2;
+        Page<Comment> commentPage = commentService.getListByArticleIdPage(articleId, page, size);
+        System.out.println(commentPage.getTotalElements());
+        commentPage.getContent().forEach(System.out::println);
     }
 }

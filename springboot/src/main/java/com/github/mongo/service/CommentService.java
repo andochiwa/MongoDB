@@ -3,6 +3,8 @@ package com.github.mongo.service;
 import com.github.mongo.dao.CommentRepository;
 import com.github.mongo.entity.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,5 +34,9 @@ public class CommentService {
 
     public Comment getById(String id) {
         return commentRepository.findById(id).orElse(null);
+    }
+
+    public Page<Comment> getListByArticleIdPage(String articleId, int page, int size) {
+        return commentRepository.findByArticleId(articleId, PageRequest.of(page - 1, size));
     }
 }
