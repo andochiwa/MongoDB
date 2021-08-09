@@ -65,4 +65,11 @@ class CommentServiceTest {
         System.out.println(commentPage.getTotalElements());
         commentPage.getContent().forEach(System.out::println);
     }
+
+    @Test
+    void updateLikeNum() {
+        String id = "610d11cb775bec0fccfa990a";
+
+        commentService.updateLikeNum(id);
+    }
 }
