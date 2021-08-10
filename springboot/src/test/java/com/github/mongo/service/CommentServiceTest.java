@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,8 +20,6 @@ class CommentServiceTest {
     @Autowired
     private CommentService commentService;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
 
     @Test
     void saveOrUpdate() {
