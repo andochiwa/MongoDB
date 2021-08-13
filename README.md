@@ -536,3 +536,52 @@ db.runCommand({rolesInfo: {role: "<ROLENAME>", db: "<DATABASE>"}})
 * 备份恢复角色：backup, restore
 * 超级用户角色：root
 * 内部角色：system
+
+## 1. 单实例环境
+
+对单实例的 MongoDB 服务开启安全认证
+
+### 1.1 关闭已开启的服务（可选）
+
+增加 mongod 的单实例安全认证功能，可以在服务搭建的时候直接添加，也可以在之前搭建好的服务上添加
+
+如果使用之前搭建好的服务，需要先停止之前的服务，有快速关闭和标准关闭的方法
+
+1. 快速关闭：使用 kill 命令直接杀死进程，有可能导致数据出错
+2. 标准关闭：通过 mongo 客户端中的 shutdownServer 来关闭
+
+```json
+use admin
+db.shutdownServer()
+```
+
+### 1.2 添加用户和权限
+
+1. 启动客户端，登录客户端
+2. 创建两个管理员用户，一个是系统超级管理员`myroot`，一个是 admin 库的管理员用户`myadmin`
+
+```json
+use admin
+db.createUser({user: "myroot", pwd: "123456", roles: ["root"]})
+db.createUser({user: "myadmin", pwd: "123456", roles: [{role: "userAdminAnyDatabase", db: "admin"}]})
+# 查看创建了的用户的情况
+db.system.users.find()
+# 删除用户
+db.dropUser("myadmin")
+# 修改密码
+db.changeUserPassword("myroot", "123456")
+# 测试认证
+db.auth("myroot", "123456")
+```
+
+3. 创建普通用户
+
+创建普通用户可以在没有开启认证的时候添加，也可以在开启认证之后添加，但开启认证之后必须使用有操作 admin 库的用户登录认证后才能操作。低层都是将用户信息保存在了 admin 数据库的集合 system.users 中
+
+```json
+use articledb
+db.createUser({user: "andochiwa", pwd: "123456", roles: [{role: "readWrite", db: "articledb"}]})
+# 测试是否可用
+db.auth("andochiwa", "123456")
+```
+
