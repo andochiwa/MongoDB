@@ -479,3 +479,60 @@ MongoDB 的副本集是一组维护相同数据集的 mongod 服务。副本集�
 * config servers（调度配置）：配置服务器存储集群的元数据和配置设置。从 mongodb3.4 开始，必须将配置服务器部署为副本集（CSRS）
 
 <img src="img/1.png" style="zoom:150%;" />
+
+# MongoDB 安全认证
+
+1. 用户和角色权限
+
+默认情况下，Mongo 实例启动运行时是没有启用用户访问权限控制的，也就是说，在实例本机服务器上都可以随意连接到实例进行各种操作，Mongo 不会对连接客户端进行用户验证
+
+MongoDB 官网上说，为了能保障 MongoDB 安全，可以做以下几个步骤：
+
+1. 使用新的端口，默认的 27017 端口一旦知道了 ip 就能连接上，不安全
+2. 设置 MongoDB 的网络环境，最好将 MongoDB 部署到公司服务器内网，这样外网无法访问，内网使用 vpn 等
+3. 开启安全认证。认证要同时设置服务器之间的内部认证方式，同时要设置客户端连接到集群的账号密码认证方式
+
+为了强制开启用户访问控制，需要在 MongoDB 实例启动时使用选项 --auth 或在指定启动配置文件中添加选项`auth=true`
+
+其中的一些概念：
+
+1. 启用访问控制
+
+MongoDB 使用的是基于角色的访问控制（RBAC）来管理用户对实例的访问。通过对用户授予一个或者多个角色来控制用户访问数据库资源的权限和数据库操作的权限。在对用户分配角色之前，用户无法访问实例
+
+2. 角色
+
+在 MongoDB 中通过角色对用户授予相应的数据库资源的操作权限，每个角色当中的权限可以显示指定，也可以通过继承其他角色的权限，或者两者都存在的权限
+
+3. 权限：
+
+权限由指定的数据库资源以及允许在指定资源上进行的操作组成
+
+资源包括：数据库、集合、部分集合和集群
+
+操作包括：对资源进行的 CRUD 操作
+
+在角色定义时可以包含一个或多个已存在的角色，新创建的角色会继承包含的角色所有的权限。在同一个数据库中，新创建角色可以继承其他角色的权限，在`admin`数据库中创建的角色可以继承在其他任意数据库中角色的权限
+
+关于角色权限的查看，可以通过以下命令查询
+
+```json
+# 查询所有角色权限(仅用户自定义角色)
+db.runCommand({rolesInfo: 1})
+# 查询所有角色权限(包含内置角色)
+db.runCommand({rolesInfo: 1, showBuiltinRoles: true})
+# 查询当前数据库中的某角色的权限
+db.runCommand({rolesInfo: "<ROLENAME>"})
+# 查询其他数据库中指定的角色权限
+db.runCommand({rolesInfo: {role: "<ROLENAME>", db: "<DATABASE>"}})
+```
+
+常见内置角色：
+
+* 数据库用户角色：read, readWrite
+* 所有数据库用户角色：readAnyDatabase, readWriteAnyDatabase, userAdminAnyDatabase, dbAdminAnyDatabase
+* 数据库管理角色：dbAdmin, dbOwner, userAdmin
+* 集群管理角色：clusterAdmin, clusterManager, clusterMonitor, hostManager
+* 备份恢复角色：backup, restore
+* 超级用户角色：root
+* 内部角色：system
