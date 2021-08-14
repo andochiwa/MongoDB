@@ -482,6 +482,8 @@ MongoDB 的副本集是一组维护相同数据集的 mongod 服务。副本集�
 
 # MongoDB 安全认证
 
+> 注意：docker 的官方容器已经默认开启了安全认证
+
 1. 用户和角色权限
 
 默认情况下，Mongo 实例启动运行时是没有启用用户访问权限控制的，也就是说，在实例本机服务器上都可以随意连接到实例进行各种操作，Mongo 不会对连接客户端进行用户验证
@@ -584,4 +586,3 @@ db.createUser({user: "andochiwa", pwd: "123456", roles: [{role: "readWrite", db:
 # 测试是否可用
 db.auth("andochiwa", "123456")
 ```
-
